@@ -1,0 +1,599 @@
+/*Author : Bhavana Sasne */
+a
+{
+    text-decoration: none;
+    color: blue;
+}
+
+a.normal
+{
+    text-decoration: none;
+    color: blue;
+}
+
+a:hover
+{
+    text-decoration: underline;
+}
+
+div#menu_block
+{
+	font: bold 12px Arial Unicode MS;
+	color:white;
+	background-repeat: repeat-x;
+	padding: 8px 10px;
+	border-right: 1px solid #778;
+	text-decoration: none;
+	float: right;
+
+}
+div#menu_block a
+{
+	color:white;
+	text-decoration:underline;
+}
+
+div#content_top
+{
+    margin: 15px auto 0 auto;
+    background-color: #5b7e99;
+    background-image: url(../images/content_top.jpg);
+    height: 90px;
+    width: 533px;
+}
+
+div#content_bottom
+{
+    margin: 0px auto 0px auto;
+	text-align:center;
+    background-repeat: no-repeat;
+    width: 533px;
+}
+
+div#content
+{
+    margin: 0px auto 0px auto;
+	background-color: #5b7e99;	
+    background-repeat: repeat-y;
+    text-align: center;
+    padding-top:20px;
+}
+
+div#content div#text
+{
+    width: 490px;
+    text-align: center;
+	font-family: Arial Unicode MS,Arial, Helvetica, sans-serif;
+    font-size: 13px;
+	font-weight: bold;
+    padding-top:20px;
+    padding-left:20px;
+
+}
+
+div#error_text
+{
+	color:white;
+	font-weight:bold;
+    width: 490px;
+    text-align: left;
+	font-family:Arial Unicode MS, Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    padding-top:20px;
+    padding-left:20px;
+
+}
+div#content div#nav
+{
+    display: inline;
+    text-align:right;
+}
+
+div#bar_nav
+{
+    margin-top: 18px;
+    margin-left: 15px;
+    padding-top: 0px;
+    background-image: url(../images/list_head.jpg);
+    background-repeat: no-repeat;
+    height: 16px;
+    width: 500px;
+    font-size: 13px;
+    text-align: left;
+    font-weight: 100;
+    font-family: Arial Unicode MS, Arial, Helvetica, sans-serif;
+    color: #FFFFFF;
+}
+
+div#footer
+{
+    margin: 0px auto 0px auto;
+    text-align: center;
+    font-size: 12px;
+    width: 533px;
+}
+div#bodyheight
+{
+    height: 375px;
+}
+
+div#text_label
+{
+ font-size: 12px;
+ font-family: Arial Unicode MS,Arial, Helvetica, sans-serif;
+ 
+}
+div#msg_label
+{
+ font-size: 12px;
+ font-family: Arial Unicode MS,Arial, Helvetica, sans-serif;
+ width:100px;
+ 
+}
+/*shop stuff*/
+div#otherLinks a
+{
+    color: #333333;
+}
+
+dl#expand
+{
+    margin: 40px auto 0px auto;
+    width: 500px;
+    list-style: none;
+}
+
+dl#expand dt
+{
+    margin: 0px;
+    width: 450px;
+    height: 16px;
+    background-image: url(../images/list_head.jpg);
+    text-align: left;
+    padding-left: 50px;
+    font-size: 12px;
+    color: #FFF;
+    border-bottom: 1px solid #fff;
+}
+
+dl#expand dd
+{
+    margin: 0px;
+    text-align: left;
+    font-size: 14px;
+    display: none;
+}
+
+dl#expand dd img
+{
+    float: left;
+}
+
+
+div.label
+{
+    margin: 0px;
+    width: 100px;
+    text-align: left;
+    float: left;
+}
+
+input.button
+{
+    float: right;
+
+}
+input.btn
+{
+border: none;
+	margin-right: 1em;
+	padding: 5px;
+	text-decoration: none;
+	font-size: 14px;
+	-moz-border-radius: 4px;
+	background: #D54433;  
+	color: white;
+	box-shadow: 0 1px 0 white;
+	-moz-box-shadow: 0 1px 0 white;
+	-webkit-box-shadow: 0 1px 0 white;
+}
+input[type=submit]{
+	border: none;
+	margin-right: 1em;
+	padding: 6px;
+	text-decoration: none;
+	font-size: 12px;
+	-moz-border-radius: 4px;
+	background: #D54433;  
+	color: white;
+	box-shadow: 0 1px 0 white;
+	-moz-box-shadow: 0 1px 0 white;
+	-webkit-box-shadow: 0 1px 0 white;
+
+}
+
+/*spacer is used between the large icons on the index page*/
+div#spacer
+{
+    margin: 0px 40px 0px 40px;
+    display: inline;
+    margin: 0px 25px 0px 25px;
+}
+
+div#spacer_small
+{
+    margin: 0px 5px 0px 5px;
+    display: inline;
+}
+
+/*removed border from linked image*/
+img
+{
+    border-style: none;
+}
+
+/*remove bullets from list*/
+ul
+{
+    list-style: none;
+}
+
+div#stamp
+{
+    text-align: center;
+    margin-top: -200px;
+    margin-right: 471px;
+}
+
+.red
+{
+    color: #FF0000;
+}
+
+.white
+{
+    color: #FFFFFF;
+}
+
+h1
+{
+	text-align:center;
+}
+
+p.center
+{
+	text-align:center;
+}
+
+.survey_name
+{
+	font-weight:bold;
+	font-size:18px;
+	text-align:center;
+	padding:0px 0px 10px 0px;
+}
+
+.survey_section
+{
+	font-weight:bold;
+	text-align:justify;
+	font-size:16px;
+	padding:0px 5px 10px 5px;
+	border:none;
+}
+
+.question_num
+{
+	font-weight:normal;
+	font-size:12px;
+	vertical-align:top;
+	width:25px;
+}
+
+.question_text
+{
+	font-weight:normal;
+	font-size:12px;
+	vertical-align:top;
+	padding:0px;
+	margin:0px;
+}
+
+.question
+{
+	margin:0px 0px 0px 10px;
+	padding:0px 0px 15px 0px;
+}
+
+.td_spacer
+{
+	font-size:1px;
+	height:10px;
+}
+
+.choice_text_area
+{
+	width:320px;
+	height:100px;
+}
+
+.td_text_area
+{
+	text-align:center;
+}
+
+.question_text_area
+{
+	text-align:left;
+	width:520px;
+	height:100px;
+}
+
+a.ss_choice
+{
+	border:1px solid white;
+	color:blue;
+	margin-bottom:2px;
+	padding: 0px 2px 0px 2px;
+	display:block;
+	width:90%;
+}
+
+a.ss_choice:hover
+{
+	background-color:#9999FF;
+	text-decoration:none;
+	color:blue;
+	margin-bottom:2px;
+	padding: 0px 2px 0px 2px;
+	display:block;
+	width:90%;
+}
+
+a.ss_choice_selected
+{
+	border:1px solid black;
+	background-color:#AAAAFF;
+	color:white;
+	margin-bottom:2px;
+	padding: 0px 2px 0px 2px;
+	display:block;
+	width:90%;
+}
+
+a.ss_choice_selected:hover
+{
+	text-decoration:none;
+	color:white;
+	margin-bottom:2px;
+	padding: 0px 2px 0px 2px;
+	display:block;
+	width:90%;
+}
+
+.tabularColumn
+{
+    color:white;
+    background-color:#444499;
+    border:1px solid black;
+    border-bottom:1px dashed black;
+}
+
+.tabularCellA
+{
+    color:black;
+    background-color:#8888DD;
+    border:1px solid #6666BB;
+}
+
+.tabularCellB
+{
+    color:black;
+    background-color:#AAAAFF;
+    border:1px solid #8888DD;
+}
+h5
+{
+	text-decoration:underline;
+	margin-bottom:3px;
+	font-family: Arial Unicode MS, Arial, Helvetica, sans-serif;
+	font-size:15px;
+}
+
+h4
+{
+	text-decoration:underline;
+	margin-bottom:3px;
+
+}
+h3
+{
+	color:black;
+	margin-bottom:3px;
+
+}
+
+h2
+{
+	margin-bottom:3px;
+	text-align:center;
+	font-family: Arial Unicode MS, Arial, Helvetica, sans-serif;
+
+
+}
+div#preferences label
+{
+	border-top:1px solid black;
+	border-left:1px solid black;
+	border-right:1px solid black;
+	padding:0px 3px 0px 3px;
+	font-size:12px;
+	background-color:#DDDDFF;
+}
+
+div#preferences input
+{
+	font-size:12px;
+	margin-bottom:5px;
+	padding:2px;
+}
+
+option#_CONFIG[debug]
+{
+	border:1px solid black;
+	font-size:12px;
+	margin-bottom:5px;
+	padding:2px;
+}
+
+.banner {
+    width: 100%;
+}
+
+#main {
+	width: 100%;
+	margin: 0 auto;
+}
+body
+{
+	margin: 0px;
+    /*font-family: Arial Unicode MS, Arial, Helvetica, sans-serif;*/
+   /* background-color: #F9DD71;*/
+	background-color: white;
+    background-image: url(../images/gradient_yellow.jpg);
+    background-repeat: repeat-x;
+    background-position: top;
+    padding-bottom:20px;
+	width:100%;
+	height:100%;
+	text-align: center;
+	max-height: 100%;
+	
+}
+#maincontent{
+position: fixed; 
+top: 0;
+left: 100px; /*Set left value to WidthOfLeftFrameDiv*/
+right: 100px; /*Set right value to WidthOfRightFrameDiv*/
+bottom: 0px; /*Set bottom value to HeightOfFrameDiv*/
+overflow: auto; 
+background: #fff;
+}
+* html body{ /*IE6 hack*/
+padding: 0 100px 0 100px; /*Set value to (0 WidthOfRightFrameDiv 0 WidthOfLeftFrameDiv)*/
+}
+
+* html #maincontent{ /*IE6 hack*/
+height: 100%; 
+width: 100%; 
+}
+
+#framecontentLeft, #framecontentRight{
+position: absolute; 
+top: 0; 
+left: 0; 
+width: 100px; /*Width of left frame div*/
+height: 100%;
+overflow: hidden; /*Disable scrollbars. Set to "scroll" to enable*/
+background-color: #F9DD71;
+color: white;
+}
+
+#framecontentRight{
+left: auto;
+right: 0; 
+width: 100px; /*Width of right frame div*/
+overflow: hidden; /*Disable scrollbars. Set to "scroll" to enable*/
+background-color: #F9DD71;
+color: white;
+}
+
+
+ #wrapper{
+	
+	width:80%;
+
+	text-align:left;
+	margin:0px auto;
+	background-color: white;
+	box-shadow: 0px 0px 10px #666;
+	/*-moz-box-shadow: 0px 0px 10px #666;*/
+	-webkit-box-shadow: 0px 0px 10px #666;
+}
+
+
+div#otherLinks
+{
+    text-align: center;
+    padding-top: 10px;
+    font-family: Arial Unicode MS,Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: #000000;
+}
+
+div#letter
+{
+	width: 900px;	
+	margin-left: auto ;
+  margin-right: auto ;
+  font-size: 20px;
+   
+}
+
+div#manual
+{
+  width: 700px ;
+  margin-left: auto ;
+  margin-right: auto ;	
+  font-size: 12px;
+  font-family: Arial Unicode MS,Arial, Helvetica, sans-serif;
+}
+
+table, td, tr, th
+{
+  font-size: 12px;
+  font-family: Arial Unicode MS,Arial, Helvetica, sans-serif;
+}
+
+textarea
+{
+  font-size: 12px;
+  font-family: Arial Unicode MS,Arial, Helvetica, sans-serif;
+
+}
+
+table.tableformat
+{ 
+	width: 100%;
+	border: 1px #000000 solid;
+	border-spacing: 10px; 
+}
+
+td.header
+
+{
+	width: 100%;
+	background-color: #99CCCC;
+	border: 1px #000000 solid;
+	border-collapse: collapse;
+	font-family: Arial Unicode MS;
+	font-weight: bold;
+	font-size: 14px;
+	color: #404040;
+}
+
+
+td.detail
+{
+	border-bottom: 1px #6699CC dotted;
+	text-align: left;
+	font-family: Arial Unicode MS, sans-serif, Arial;
+	font-weight: normal;
+	font-size: 12px;
+	color: #404040;
+	background-color: #fafafa;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	padding-left: 8px;
+	padding-right: 0px; 
+}

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Sim2DV1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Sim2DV1/Sim2DV1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

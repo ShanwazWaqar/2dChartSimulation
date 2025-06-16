@@ -1,0 +1,2 @@
+Please place this folder content at location C:\tmp\readfiles
+The files are to be read from the java applet and so requires reading from server machine

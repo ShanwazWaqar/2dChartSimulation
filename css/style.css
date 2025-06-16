@@ -1,0 +1,205 @@
+
+div.content {
+	align:center;
+	font-family:Arial Unicode MS;
+	padding:10px 20px;
+
+}
+div.content div.message{
+	align:left;
+	font-size: 12px;
+	font-family:Arial Unicode MS,Arial,Geneva,Sans-serif;
+}
+div.content h1 {
+	font-size:18pt;
+	border-bottom:5px solid #D54433;
+	padding:px;
+	margin:10px 0px 20px;
+	width:80%;
+}
+
+div.content div.data table {
+	border:2px solid #000;
+	background:#fff;
+/*	width:65%;*/
+	text-align:center;
+	
+	
+}
+div.content div.data table td {
+	font-size:10pt;
+	padding:5px 10px;
+	border-bottom:1px solid #ddd;
+	text-align: left;
+}
+div.content div.data table th {
+	text-align: center;
+	font-size: 8pt;
+	padding: 10px 10px 7px;
+	text-transform: uppercase;
+	color: #000;
+	
+}
+
+div.paging {
+	font-size: 9pt;
+	margin:5px 0px;
+}
+div.paging a {
+	color:#900;
+	text-transform: uppercase;
+	text-decoration: none;
+}
+div.paging a:hover {
+	color:#c00;
+}
+div.paging b {
+	color:#900;
+}
+
+div.success {
+	font-size:14pt;
+	padding:0px;
+	padding-left:20px;
+	margin:0px 0px 10px;
+	color:#060;
+	width:80%;
+}
+
+a.update, a.delete, a.add, a.view, a.back {
+	font-size: 10pt;
+	color:#900;
+	font-family:Arial Unicode MS;
+	font-weight:bold;
+	padding-left:20px;
+	text-decoration: none;
+}
+
+a.update:hover, a.delete:hover, a.add:hover, a.view:hover {
+	color:#000;
+}
+
+input.text {
+	border:2px solid #aaa;
+	
+}
+/*Course assessment team css*/
+.error {
+ color: #FF0000;
+ background-color: transparent;
+ font-size: 10px;
+ font-weight: normal;
+ padding: 5px 5px;
+}
+
+.form_error {
+ color: #FF0000;
+ background-color: transparent;
+ font-size: 10px;
+ font-weight: normal;
+ padding: 5px 5px;
+}
+.real_small_ital {
+ font-size:10px;
+ font-style:italic;
+}
+.real_small_bold {
+ font-size:10px;
+ font-weight:bold;
+}
+
+div.ca_r_title {
+	font-family: Arial Unicode MS, sans-serif;
+	font-size:16pt;
+	font-weight: bold;
+	padding:10px 0px 20px 0px;
+	text-align: center;
+	border-bottom:2px solid #000000;
+	border-top:2px solid #000000;
+}
+
+div.ca_r_end {
+	font-family: Arial Unicode MS, sans-serif;
+	font-size:12pt;
+	font-weight: normal;
+	margin: 20px 0px;
+	padding:10px 0px 10px 0px;
+	text-align: center;
+	border-bottom:2px solid #000000;
+	border-top:2px solid #000000;
+}
+div.ca_r_lvl_0 {
+	font-family: Arial Unicode MS, sans-serif;
+	font-size:16pt;
+	font-weight: bold;
+	padding:10px 0px 20px 0px;
+	text-align: center;
+	border-bottom:2px solid #000000;
+	border-top:2px solid #000000;
+}
+div.ca_r_lvl_1 {
+	font-family: Arial Unicode MS, sans-serif;
+	font-weight:bold;
+	font-size:14pt;
+	padding:15px 0px 5px 0px;
+	border-bottom:1px solid #404040;
+	text-align: left;
+}
+div.ca_r_lvl_2 {
+	font-family: Arial Unicode MS, sans-serif;
+	font-weight:normal;
+	font-size:14pt;
+	padding:5px 0px 5px 0px;
+	text-align: left;
+}
+div.ca_r_lvl_3 {
+	font-family: Arial Unicode MS, sans-serif;
+	font-weight:bold;
+	font-size:13pt;
+	padding:5px 5px 5px 15px;
+	border-bottom:1px solid #ddd;
+	text-align: left;
+}
+div.ca_r_lvl_4 {
+	font-family: Arial Unicode MS, sans-serif;
+	font-weight:normal;
+	font-size:13pt;
+	padding:5px 5px 5px 30px;
+	text-align: left;
+}
+div.ca_r_lvl_5 {
+	font-family: Arial Unicode MS, sans-serif;
+	font-weight:normal;
+	font-size:11pt;
+	padding:5px 5px 5px 45px;
+	text-align: left;
+}
+.ca_f_button{
+	border: none;
+	margin-right: 1em;
+	padding: 6px;
+	text-decoration: none;
+	font-size: 12px;
+	-moz-border-radius: 4px;
+	background: #D54433;  
+	color: white;
+	box-shadow: 0 1px 0 white;
+	-moz-box-shadow: 0 1px 0 white;
+	-webkit-box-shadow: 0 1px 0 white;
+}
+
+
+input.btn
+{
+border: none;
+	margin-right: 1em;
+	padding: 5px;
+	text-decoration: none;
+	font-size: 14px;
+	-moz-border-radius: 4px;
+	background: #D54433;  
+	color: white;
+	box-shadow: 0 1px 0 white;
+	-moz-box-shadow: 0 1px 0 white;
+	-webkit-box-shadow: 0 1px 0 white;
+}

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="ImgWaveV1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/ImgWaveV1/ImgWaveV1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

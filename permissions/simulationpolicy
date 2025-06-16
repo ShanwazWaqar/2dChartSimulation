@@ -1,0 +1,7 @@
+/* AUTOMATICALLY GENERATED ON Thu Jul 12 15:50:39 EDT 2012*/
+/* DO NOT EDIT */
+
+grant codeBase "http://localhost:8080/Simulation" {
+  permission java.security.AllPermission;
+};
+
