@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Simulate Corrosion</title>
+</head>
+<body>
+<h2>Corrosion Simulation Input</h2>
+<form th:action="@{/simulation}" th:object="${simulation}" method="post">
+    <label>Rows:</label>
+    <input type="number" th:field="*{noRows}" /><br/>
+    <label>Columns:</label>
+    <input type="number" th:field="*{noColumns}" /><br/>
+    <label>pH:</label>
+    <input type="number" step="0.01" th:field="*{phValue}" /><br/>
+    <label>Temperature:</label>
+    <input type="number" step="0.1" th:field="*{temperature}" /><br/>
+    <button type="submit">Run</button>
+</form>
+</body>
+</html>
