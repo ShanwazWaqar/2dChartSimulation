@@ -174,6 +174,26 @@ public class ImageMatrix
 		return String.format("%3.3f,%3.3f,%3.3f,%3.3f", s , e1, e2, (e2/e1));
 	}
 
+	public BufferedImage renderImage() {
+        BufferedImage img = new BufferedImage(Cols * f, Rows * f, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2d = img.createGraphics();
+        paint(g2d);
+        g2d.dispose();
+        return img;
+    }
+
+    public void saveRenderedImage(String filename) throws IOException {
+        BufferedImage img = renderImage();
+        File outputfile = new File(filename);
+        ImageIO.write(img, "jpg", outputfile);
+    }
+
+
+    private Color getColorFromValue(float value) {
+        int intensity = Math.min(255, Math.max(0, (int) value));
+        return new Color(intensity, intensity, intensity);
+    }
+
 	public String wavelet2D(int i)
 	{
 
@@ -312,10 +332,6 @@ public class ImageMatrix
 		}
 	}
 
-	private Color getColorFromValue(float value) {
-		int intensity = Math.min(255, Math.max(0, (int) value));
-		return new Color(intensity, intensity, intensity);
-	}
 
 	public String simulate(double d, double d1, double d2, double d3, double d4, double d5, double cs, int sf,int itrNo)
 	{
