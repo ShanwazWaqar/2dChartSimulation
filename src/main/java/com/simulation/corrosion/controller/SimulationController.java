@@ -16,7 +16,7 @@ public class SimulationController {
     @GetMapping
     public String showForm(Model model) {
         model.addAttribute("simulation", new SimulationRequestDTO());
-        return "simulate";  // simulate.html page
+        return "simulate"; // simulate.html page
     }
 
     @PostMapping
@@ -38,6 +38,14 @@ class SimulationRestController {
             result.put("success", true);
             result.put("message", "Simulation completed successfully");
             result.put("input", request);
+
+            // Mock data for frontend visualization
+            result.put("corrosionDetected", true);
+            result.put("corrosionPercentage", 45.5);
+            result.put("analysisResult", "Severe pitting detected in quadrant 3");
+            result.put("imagePath", ""); // Placeholder or empty for now
+            result.put("processedImagePath", ""); // Placeholder or empty for now
+
             // Add more result fields as needed
             return ResponseEntity.ok(result);
         } catch (Exception e) {

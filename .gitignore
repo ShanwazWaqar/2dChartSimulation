@@ -1,33 +1,51 @@
-HELP.md
-target/
-.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
+# Testing
+coverage/
+*.log
+*.log.*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
+# Build
+dist/
 build/
-!**/src/main/**/build/
-!**/src/test/**/build/
+target/
+out/
 
-### VS Code ###
+# IDEs
+.idea/
 .vscode/
+*.swp
+*.iml
+.DS_Store
+
+# Environment
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Framework specific
+.next/
+.nuxt/
+
+# Project Specific
+output/
+upload/
+*.class
+*.jar
+*.war
+
+# Temporary Logs
+test_results.log
+form_test_results.log
+results_test.log
+
+# Brain artifacts (if accidentally copied)
+brain/

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { CloudArrowUpIcon } from '@heroicons/react/24/outline';
 
 // The backend URL is configured via the REACT_APP_API_URL environment variable in the .env file at the project root.
 
@@ -38,16 +39,47 @@ function SingleUpload() {
   };
 
   return (
-    <div className="p-6 max-w-md mx-auto bg-white rounded-xl shadow-md space-y-4">
-      <h2 className="text-lg font-semibold">Single File Upload</h2>
-      <input type="file" onChange={handleFileChange} className="block w-full" />
-      <button
-        onClick={handleUpload}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-      >
-        Upload
-      </button>
-      {uploadStatus && <p className="text-sm text-gray-700">{uploadStatus}</p>}
+    <div className="min-h-screen bg-uga-gray-50 py-8">
+      <div className="max-w-md mx-auto px-4">
+        <div className="bg-white rounded-2xl shadow-lg border border-uga-gray-200 p-8">
+          <h2 className="text-2xl font-bold text-uga-black mb-6 text-center">
+            Single File Upload
+          </h2>
+          
+          <div className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-uga-black mb-2">
+                Select File
+              </label>
+              <input 
+                type="file" 
+                onChange={handleFileChange} 
+                className="w-full px-4 py-3 border border-uga-gray-300 rounded-lg focus:ring-2 focus:ring-uga-red focus:border-uga-red file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-uga-gray-50 file:text-uga-black hover:file:bg-uga-gray-100"
+              />
+            </div>
+            
+            <button
+              onClick={handleUpload}
+              className="w-full flex items-center justify-center px-6 py-3 bg-uga-red text-white rounded-lg hover:bg-uga-red-dark focus:outline-none focus:ring-2 focus:ring-uga-red font-medium transition-colors"
+            >
+              <CloudArrowUpIcon className="h-5 w-5 mr-2" />
+              Upload File
+            </button>
+            
+            {uploadStatus && (
+              <div className={`p-4 rounded-lg text-sm font-medium ${
+                uploadStatus.includes('successfully') 
+                  ? 'bg-green-50 text-green-800 border border-green-200' 
+                  : uploadStatus.includes('Error') || uploadStatus.includes('failed')
+                  ? 'bg-red-50 text-red-800 border border-red-200'
+                  : 'bg-uga-gray-50 text-uga-gray-700 border border-uga-gray-200'
+              }`}>
+                {uploadStatus}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Activity, Play, RotateCcw, AlertCircle, Grid, Zap, Droplets, Maximize } from 'lucide-react';
+import SimulationResults from './SimulationResults';
 
 // The backend URL is configured via the REACT_APP_API_URL environment variable in the .env file at the project root.
 const Sim2DSettings = () => {
@@ -20,8 +22,9 @@ const Sim2DSettings = () => {
   });
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [results, setResults] = useState(null);
 
-  const API_URL = process.env.REACT_APP_API_URL;
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -29,7 +32,7 @@ const Sim2DSettings = () => {
       ...prev,
       [name]: value
     }));
-    
+
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
@@ -42,42 +45,23 @@ const Sim2DSettings = () => {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.noRows || formData.noRows === '') {
-      newErrors.noRows = 'Please enter No of rows';
+    if (!formData.noRows || formData.noRows === '') newErrors.noRows = 'Required';
+    if (!formData.noColumns || formData.noColumns === '') newErrors.noColumns = 'Required';
+    if (!formData.param1 || formData.param1 === '') newErrors.param1 = 'Required';
+    if (!formData.param2 || formData.param2 === '') newErrors.param2 = 'Required';
+    if (!formData.param3 || formData.param3 === '') newErrors.param3 = 'Required';
+    if (!formData.param4 || formData.param4 === '') newErrors.param4 = 'Required';
+    if (!formData.constant || formData.constant === '') newErrors.constant = 'Required';
+
+    // Explicitly allow 0 for stressfact
+    if (formData.stressfact === undefined || formData.stressfact === null || formData.stressfact === '') {
+      newErrors.stressfact = 'Required';
     }
-    if (!formData.noColumns || formData.noColumns === '') {
-      newErrors.noColumns = 'Please enter No of columns';
-    }
-    if (!formData.param1 || formData.param1 === '') {
-      newErrors.param1 = 'Please enter PH Value';
-    }
-    if (!formData.param2 || formData.param2 === '') {
-      newErrors.param2 = 'Please enter temperature';
-    }
-    if (!formData.param3 || formData.param3 === '') {
-      newErrors.param3 = 'Please enter potential';
-    }
-    if (!formData.param4 || formData.param4 === '') {
-      newErrors.param4 = 'Please enter concentration';
-    }
-    if (!formData.constant || formData.constant === '') {
-      newErrors.constant = 'Please enter the constant value';
-    }
-    if (!formData.stressfact || formData.stressfact === '') {
-      newErrors.stressfact = 'Please enter the stress factor';
-    }
-    if (!formData.noIterations || formData.noIterations === '') {
-      newErrors.noIterations = 'Please enter the No of iterations';
-    }
-    if (!formData.numPits || formData.numPits === '') {
-      newErrors.numPits = 'Please enter the number of pits';
-    }
-    if (!formData.pitSpacing || formData.pitSpacing === '') {
-      newErrors.pitSpacing = 'Please enter the pit spacing';
-    }
-    if (!formData.pitSize || formData.pitSize === '') {
-      newErrors.pitSize = 'Please enter the initial pit size';
-    }
+
+    if (!formData.noIterations || formData.noIterations === '') newErrors.noIterations = 'Required';
+    if (!formData.numPits || formData.numPits === '') newErrors.numPits = 'Required';
+    if (!formData.pitSpacing || formData.pitSpacing === '') newErrors.pitSpacing = 'Required';
+    if (!formData.pitSize || formData.pitSize === '') newErrors.pitSize = 'Required';
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -85,25 +69,48 @@ const Sim2DSettings = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (!validateForm()) {
-      return;
-    }
+
+    if (!validateForm()) return;
 
     setIsLoading(true);
+    setResults(null);
 
     try {
-      const response = await fetch(`${API_URL}/api/sim2d`, {
+      // Construct payload to match backend DTO
+      const payload = {
+        ...formData,
+        stressFact: Number(formData.stressfact), // Map to camelCase expected by backend
+        path: 'output/sim2d/' // Add required path to prevent backend NPE
+      };
+
+      const response = await fetch(`${API_URL}/api/simulate2d`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(payload)
       });
 
       if (response.ok) {
         const result = await response.json();
-        navigate('/results', { state: { simulationData: formData, results: result, type: 'multi-pit' } });
+
+        // Flatten the response for SimulationResults component and fix image path
+        // The backend returns a relative path like "/output/sim2d/result.png"
+        // We need to prepend the API endpoint to serve it correctly
+        const processedImagePath = result.processedImagePath
+          ? `${API_URL}${result.processedImagePath.startsWith('/') ? '' : '/'}${result.processedImagePath}`
+          : null;
+
+        const formattedResults = {
+          ...result,
+          corrosionDetected: result.stats?.corrosionDetected ?? true,
+          corrosionPercentage: result.stats?.corrosionPercentage ?? 0,
+          analysisResult: result.stats?.analysisResult ?? "Multi-pit simulation completed.",
+          imagePath: result.imagePath || "", // Original image likely not used/generated here same way
+          processedImagePath: processedImagePath
+        };
+
+        setResults({ results: formattedResults, simulationData: formData });
       } else {
         throw new Error('Simulation failed');
       }
@@ -131,268 +138,269 @@ const Sim2DSettings = () => {
       pitSize: 10
     });
     setErrors({});
+    setResults(null);
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="bg-white rounded-lg shadow-md p-8">
-        <h1 className="text-3xl font-bold text-center mb-8 text-gray-900">
-          Corrosion Multi Pit Growth Simulation (2D)
-        </h1>
+    <div className="min-h-screen bg-uga-gray-50 py-8">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Panel Size */}
-          <div className="bg-blue-50 rounded-lg p-6">
-            <h2 className="text-xl font-semibold mb-4 text-blue-900">
-              Panel Size Configuration
-            </h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Panel Size (Rows × Columns)
-                </label>
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="number"
-                    name="noRows"
-                    value={formData.noRows}
-                    onChange={handleInputChange}
-                    className={`flex-1 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.noRows ? 'border-red-500' : 'border-gray-300'
-                    }`}
-                    min="1"
-                    max="1000"
-                  />
-                  <span className="text-gray-500">×</span>
-                  <input
-                    type="number"
-                    name="noColumns"
-                    value={formData.noColumns}
-                    onChange={handleInputChange}
-                    className={`flex-1 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.noColumns ? 'border-red-500' : 'border-gray-300'
-                    }`}
-                    min="1"
-                    max="1000"
-                  />
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 flex items-center">
+            <Grid className="w-8 h-8 mr-3 text-uga-red" />
+            Multi-Pit Growth Simulation (2D)
+          </h1>
+          <p className="text-gray-600 mt-2 text-lg">Simulate multiple corrosion pits interacting across a 2D lattice grid.</p>
+        </div>
+
+        <div className="grid lg:grid-cols-2 gap-8 items-start">
+          {/* LEFT COLUMN: Input Form */}
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+            <div className="bg-gray-50/50 px-8 py-4 border-b border-gray-100 flex justify-between items-center">
+              <h2 className="text-lg font-semibold text-gray-800">Configuration</h2>
+              <span className="text-xs font-medium px-2.5 py-0.5 rounded bg-blue-100 text-blue-800">Multi-Pit Mode</span>
+            </div>
+
+            <form onSubmit={handleSubmit} className="p-6 space-y-8">
+
+              {/* Panel Size */}
+              <section>
+                <h2 className="text-sm uppercase tracking-wide text-gray-500 font-bold mb-4 flex items-center">
+                  <Maximize className="w-4 h-4 mr-2" />
+                  Grid Dimensions
+                </h2>
+                <div className="bg-slate-50 rounded-lg p-5 border border-slate-100 transition-all hover:border-slate-300">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 uppercase mb-1">Rows</label>
+                      <input
+                        type="number"
+                        name="noRows"
+                        value={formData.noRows}
+                        onChange={handleInputChange}
+                        className={`w-full px-3 py-2 bg-white border rounded-md text-sm focus:ring-2 focus:ring-uga-red/20 focus:border-uga-red transition-all ${errors.noRows ? 'border-red-500' : 'border-gray-300'}`}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 uppercase mb-1">Columns</label>
+                      <input
+                        type="number"
+                        name="noColumns"
+                        value={formData.noColumns}
+                        onChange={handleInputChange}
+                        className={`w-full px-3 py-2 bg-white border rounded-md text-sm focus:ring-2 focus:ring-uga-red/20 focus:border-uga-red transition-all ${errors.noColumns ? 'border-red-500' : 'border-gray-300'}`}
+                      />
+                    </div>
+                  </div>
+                  {(errors.noRows || errors.noColumns) && <p className="text-red-500 text-xs mt-2 flex items-center"><AlertCircle className="w-3 h-3 mr-1" /> Dimensions required</p>}
                 </div>
-                {errors.noRows && <p className="text-red-500 text-sm mt-1">{errors.noRows}</p>}
-                {errors.noColumns && <p className="text-red-500 text-sm mt-1">{errors.noColumns}</p>}
-              </div>
-            </div>
-          </div>
+              </section>
 
-          {/* Chemical Parameters */}
-          <div className="bg-green-50 rounded-lg p-6">
-            <h2 className="text-xl font-semibold mb-4 text-green-900">
-              Chemical Parameters
-            </h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  pH Value
-                </label>
-                <input
-                  type="number"
-                  name="param1"
-                  value={formData.param1}
-                  onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 ${
-                    errors.param1 ? 'border-red-500' : 'border-gray-300'
-                  }`}
-                  step="0.1"
-                />
-                {errors.param1 && <p className="text-red-500 text-sm mt-1">{errors.param1}</p>}
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Temperature (°C)
-                </label>
-                <input
-                  type="number"
-                  name="param2"
-                  value={formData.param2}
-                  onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 ${
-                    errors.param2 ? 'border-red-500' : 'border-gray-300'
-                  }`}
-                  step="0.1"
-                />
-                {errors.param2 && <p className="text-red-500 text-sm mt-1">{errors.param2}</p>}
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Potential (V)
-                </label>
-                <input
-                  type="number"
-                  name="param3"
-                  value={formData.param3}
-                  onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 ${
-                    errors.param3 ? 'border-red-500' : 'border-gray-300'
-                  }`}
-                  step="0.01"
-                />
-                {errors.param3 && <p className="text-red-500 text-sm mt-1">{errors.param3}</p>}
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Concentration (mol/L)
-                </label>
-                <input
-                  type="number"
-                  name="param4"
-                  value={formData.param4}
-                  onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 ${
-                    errors.param4 ? 'border-red-500' : 'border-gray-300'
-                  }`}
-                  step="0.01"
-                />
-                {errors.param4 && <p className="text-red-500 text-sm mt-1">{errors.param4}</p>}
-              </div>
-            </div>
-          </div>
-
-          {/* Multi-Pit Configuration */}
-          <div className="bg-purple-50 rounded-lg p-6">
-            <h2 className="text-xl font-semibold mb-4 text-purple-900">
-              Multi-Pit Configuration
-            </h2>
-            <div className="grid md:grid-cols-3 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Number of Pits
-                </label>
-                <input
-                  type="number"
-                  name="numPits"
-                  value={formData.numPits}
-                  onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 ${
-                    errors.numPits ? 'border-red-500' : 'border-gray-300'
-                  }`}
-                  min="1"
-                  max="50"
-                />
-                {errors.numPits && <p className="text-red-500 text-sm mt-1">{errors.numPits}</p>}
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Pit Spacing (pixels)
-                </label>
-                <input
-                  type="number"
-                  name="pitSpacing"
-                  value={formData.pitSpacing}
-                  onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 ${
-                    errors.pitSpacing ? 'border-red-500' : 'border-gray-300'
-                  }`}
-                  min="1"
-                />
-                {errors.pitSpacing && <p className="text-red-500 text-sm mt-1">{errors.pitSpacing}</p>}
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Initial Pit Size (pixels)
-                </label>
-                <input
-                  type="number"
-                  name="pitSize"
-                  value={formData.pitSize}
-                  onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 ${
-                    errors.pitSize ? 'border-red-500' : 'border-gray-300'
-                  }`}
-                  min="1"
-                />
-                {errors.pitSize && <p className="text-red-500 text-sm mt-1">{errors.pitSize}</p>}
-              </div>
-            </div>
-          </div>
-
-          {/* Stress Parameters */}
-          <div className="bg-yellow-50 rounded-lg p-6">
-            <h2 className="text-xl font-semibold mb-4 text-yellow-900">
-              Stress Parameters
-            </h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Stress Factor (Constant ^ δ)
-                </label>
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="number"
-                    name="constant"
-                    value={formData.constant}
-                    onChange={handleInputChange}
-                    className={`flex-1 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 ${
-                      errors.constant ? 'border-red-500' : 'border-gray-300'
-                    }`}
-                    step="0.01"
-                  />
-                  <span className="text-gray-500">^</span>
-                  <input
-                    type="number"
-                    name="stressfact"
-                    value={formData.stressfact}
-                    onChange={handleInputChange}
-                    className={`flex-1 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 ${
-                      errors.stressfact ? 'border-red-500' : 'border-gray-300'
-                    }`}
-                    step="0.01"
-                  />
+              {/* Chemical Parameters */}
+              <section>
+                <h2 className="text-sm uppercase tracking-wide text-gray-500 font-bold mb-4 flex items-center">
+                  <Droplets className="w-4 h-4 mr-2" />
+                  Environment
+                </h2>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">pH</label>
+                    <input
+                      type="number"
+                      name="param1"
+                      value={formData.param1}
+                      onChange={handleInputChange}
+                      step="0.1"
+                      className={`w-full px-3 py-2 border rounded-md text-sm focus:ring-1 focus:ring-uga-red focus:border-uga-red ${errors.param1 ? 'border-red-500' : 'border-gray-300'}`}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Temp (K)</label>
+                    <input
+                      type="number"
+                      name="param2"
+                      value={formData.param2}
+                      onChange={handleInputChange}
+                      step="0.1"
+                      className={`w-full px-3 py-2 border rounded-md text-sm focus:ring-1 focus:ring-uga-red focus:border-uga-red ${errors.param2 ? 'border-red-500' : 'border-gray-300'}`}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Potential (V)</label>
+                    <input
+                      type="number"
+                      name="param3"
+                      value={formData.param3}
+                      onChange={handleInputChange}
+                      step="0.01"
+                      className={`w-full px-3 py-2 border rounded-md text-sm focus:ring-1 focus:ring-uga-red focus:border-uga-red ${errors.param3 ? 'border-red-500' : 'border-gray-300'}`}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Conc. (M)</label>
+                    <input
+                      type="number"
+                      name="param4"
+                      value={formData.param4}
+                      onChange={handleInputChange}
+                      step="0.01"
+                      className={`w-full px-3 py-2 border rounded-md text-sm focus:ring-1 focus:ring-uga-red focus:border-uga-red ${errors.param4 ? 'border-red-500' : 'border-gray-300'}`}
+                    />
+                  </div>
                 </div>
-                {errors.constant && <p className="text-red-500 text-sm mt-1">{errors.constant}</p>}
-                {errors.stressfact && <p className="text-red-500 text-sm mt-1">{errors.stressfact}</p>}
-              </div>
+              </section>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Number of Iterations (Time)
-                </label>
-                <input
-                  type="number"
-                  name="noIterations"
-                  value={formData.noIterations}
-                  onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 ${
-                    errors.noIterations ? 'border-red-500' : 'border-gray-300'
-                  }`}
-                  min="1"
-                  max="1000"
-                />
-                {errors.noIterations && <p className="text-red-500 text-sm mt-1">{errors.noIterations}</p>}
+              {/* Multi-Pit Config */}
+              <section>
+                <h2 className="text-sm uppercase tracking-wide text-gray-500 font-bold mb-4 flex items-center">
+                  <Grid className="w-4 h-4 mr-2" />
+                  Pit Configuration
+                </h2>
+                <div className="grid grid-cols-3 gap-4 bg-gray-50 p-4 rounded-lg border border-gray-100">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Count</label>
+                    <input
+                      type="number"
+                      name="numPits"
+                      value={formData.numPits}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border rounded-md text-sm focus:ring-uga-red focus:border-uga-red"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Spacing (px)</label>
+                    <input
+                      type="number"
+                      name="pitSpacing"
+                      value={formData.pitSpacing}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border rounded-md text-sm focus:ring-uga-red focus:border-uga-red"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Size (px)</label>
+                    <input
+                      type="number"
+                      name="pitSize"
+                      value={formData.pitSize}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border rounded-md text-sm focus:ring-uga-red focus:border-uga-red"
+                    />
+                  </div>
+                </div>
+              </section>
+
+              {/* Stress Parameters */}
+              <section>
+                <h2 className="text-sm uppercase tracking-wide text-gray-500 font-bold mb-4 flex items-center">
+                  <Zap className="w-4 h-4 mr-2" />
+                  Mechanics
+                </h2>
+                <div className="grid grid-cols-1 gap-4">
+                  <div className="p-4 bg-slate-50 border border-slate-100 rounded-lg">
+                    <div className="flex space-x-4">
+                      <div className="flex-1">
+                        <label className="block text-xs font-medium text-gray-700 mb-1">Stress (K)</label>
+                        <input
+                          type="number"
+                          name="constant"
+                          value={formData.constant}
+                          onChange={handleInputChange}
+                          step="0.01"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-uga-red focus:border-uga-red"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <label className="block text-xs font-medium text-gray-700 mb-1">Exp (δ)</label>
+                        <input
+                          type="number"
+                          name="stressfact"
+                          value={formData.stressfact}
+                          onChange={handleInputChange}
+                          step="0.01"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-uga-red focus:border-uga-red"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <label className="block text-xs font-medium text-gray-700 mb-1">Time (Steps)</label>
+                        <input
+                          type="number"
+                          name="noIterations"
+                          value={formData.noIterations}
+                          onChange={handleInputChange}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-uga-red focus:border-uga-red"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              {/* Actions */}
+              <div className="flex items-center space-x-4 pt-4 border-t border-gray-100">
+                <button
+                  type="button"
+                  onClick={handleReset}
+                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-uga-red"
+                >
+                  Reset
+                </button>
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="flex-1 px-6 py-2 text-sm font-medium text-white bg-uga-red rounded-lg hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-uga-red disabled:opacity-50 disabled:cursor-wait shadow-md hover:shadow-lg transition-all"
+                >
+                  {isLoading ? (
+                    <span className="flex items-center justify-center">
+                      <Activity className="w-4 h-4 mr-2 animate-spin" />
+                      Running Multi-Pit Sim...
+                    </span>
+                  ) : 'Run Simulation'}
+                </button>
               </div>
-            </div>
+            </form>
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex justify-center space-x-4">
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="px-8 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
-            >
-              {isLoading ? 'Running Simulation...' : 'Run Multi-Pit Simulation'}
-            </button>
-            <button
-              type="button"
-              onClick={handleReset}
-              className="px-8 py-3 bg-gray-600 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 font-medium"
-            >
-              Reset
-            </button>
+          {/* RIGHT COLUMN: Results Panel */}
+          <div className="flex flex-col h-full">
+            {isLoading ? (
+              <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8 h-full min-h-[500px] flex flex-col justify-center items-center animate-pulse">
+                <div className="w-16 h-16 bg-gray-200 rounded-full mb-4 animate-bounce"></div>
+                <h3 className="text-xl font-semibold text-gray-700 mb-2">Simulating Multi-Pit Growth...</h3>
+                <p className="text-gray-500 text-center max-w-xs">Calculating pit interactions and stress factors across the grid.</p>
+                <div className="w-full max-w-md h-2 bg-gray-100 rounded-full mt-8 overflow-hidden">
+                  <div className="h-full bg-uga-red/50 w-1/2 animate-[shimmer_1s_infinite_linear]"></div>
+                </div>
+              </div>
+            ) : results ? (
+              <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                {/* Embedded Results Component */}
+                <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+                  <div className="bg-gray-50/50 px-6 py-3 border-b border-gray-100 flex justify-between items-center">
+                    <span className="text-gray-800 font-medium flex items-center">
+                      <Activity className="w-4 h-4 mr-2 text-uga-red" /> Results Ready
+                    </span>
+                    <span className="text-xs text-gray-500">Multi-Pit Analysis</span>
+                  </div>
+                  <div className="p-6">
+                    <SimulationResults results={results.results} simulationData={results.simulationData} />
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200 border-dashed p-8 h-full min-h-[500px] flex flex-col justify-center items-center text-center">
+                <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-4">
+                  <Play className="w-8 h-8 text-gray-300 ml-1" />
+                </div>
+                <h3 className="text-lg font-medium text-gray-900">Ready to Simulate</h3>
+                <p className="text-gray-500 mt-2 max-w-sm">
+                  Configure the parameters on the left and click "Run Simulation" to see the multi-pit corrosion growth visualization here.
+                </p>
+              </div>
+            )}
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );
