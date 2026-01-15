@@ -1,28 +1,41 @@
 # CorrosionSim: Advanced Corrosion Analysis Platform
 
-![CorrosionSim Dashboard](docs/media/screen.png)
+![CorrosionSim Dashboard](paper/screen.png)
 
 ## Overview
-CorrosionSim is a comprehensive scientific simulation and analysis platform designed for corrosion engineering. It integrates 2D cellular automata simulations with advanced neural network predictions and wavelet image analysis to model, analyze, and predict corrosion pit growth behavior.
+**CorrosionSim** is a next-generation scientific analysis platform designed for the modern web. It bridges the gap between complex electrochemical simulation and intuitive user experience, adhering to the highest standards of software engineering and accessibility.
 
-This project uses a modern **React** frontend with **UGA (University of Georgia) branding** and a robust **Spring Boot** backend for high-performance computation.
+This project uses a modern **React 19** frontend with **UGA (University of Georgia) branding** and a robust **Spring Boot** backend for high-performance computation.
 
-![Application Demo](docs/media/demo.webp)
+![Application Demo](paper/demo.webp)
+
+## Modern Engineering & Standards
+
+### 🌐 Professional UX/UI
+Designed with the "Awe" factor in mind, the interface features:
+*   **Split-View Architecture**: Seamlessly configures inputs while visualizing results in real-time.
+*   **Animated Transitions**: Smooth state changes using `tailwindcss-animate` for a polished feel.
+*   **Premium Typography**: Utilizes **Inter**, the industry-standard font for readability and elegance.
+
+### ♿ Accessibility (WCAG 2.1 Compliant)
+We prioritize inclusivity. The application passes strict WCAG 2.1 AA checks:
+*   **Focus Management**: High-visibility focus rings (UGA Red) for keyboard navigation.
+*   **Semantic HTML**: Proper labeling of form inputs (`htmlFor`, `aria-label`) ensures screen reader compatibility.
+*   **Contrast Ratios**: Verified high-contrast color pairings (#BA0C2F on White) for readability.
 
 ## Key Features
 
 ### 1. Neural Network Analysis
-*   **Predictive Modeling**: Uses trained neural networks (MLP) to predict corrosion outcome based on architectural parameters (inputs, outputs, hidden layers).
+*   **Predictive Modeling**: Uses trained neural networks (MLP) to predict corrosion outcome based on architectural parameters.
 *   **Verification Mode**: Validates models against test datasets with real-time error analysis (MSE, MAE).
-*   **Visual Results**: Displays training loss, accuracy, and detailed prediction tables in a split-view interactive dashboard.
+*   **Visual Results**: Displays training loss, accuracy, and detailed prediction tables.
 
 ### 2. 2D Corrosion Simulation
 *   **Cellular Automata**: Simulates pit growth over time using configurable electrochemical parameters.
 *   **Multi-Site Capability**: Models interactions between multiple corrosion pits.
-*   **Real-time Visualization**: Dynamic grid rendering of the corrosion front.
 
 ### 3. Image Analysis
-*   **Wavelet Transformation**: Processes surface imagery to detect early stages of corrosion not visible to the naked eye.
+*   **Wavelet Transformation**: Processes surface imagery to detect early stages of corrosion.
 *   **Statistical Metrics**: Calculates entropy, energy, and localized intensity variances.
 
 ## Tech Stack
